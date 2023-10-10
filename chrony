@@ -1,3 +1,10 @@
+1. Create a Butane config, 99-master-chrony-conf-override.bu, including the contents of the chrony.conf file for the control plane nodes.
+2. Use Butane to generate a MachineConfig object file, 99-master-chrony-conf-override.yaml, containing the configuration to be delivered to the control plane nodes:
+
+butane 99-master-chrony-conf-override.bu -o 99-master-chrony-conf-override.yaml
+
+3.Create a Butane config, 99-worker-chrony-conf-override.bu, including the contents of the chrony.conf file for the worker nodes that references the NTP servers on the control plane nodes.
+
 variant: openshift
 version: 4.12.0
 metadata:
@@ -28,3 +35,32 @@ storage:
           noclientlog
           logchange 0.5
           logdir /var/log/chronys
+
+4. Use Butane to generate a MachineConfig object file, 99-worker-chrony-conf-override.yaml, containing the configuration to be delivered to the worker nodes:
+
+butane 99-worker-chrony-conf-override.bu -o 99-worker-chrony-conf-override.yaml
+
+5. Apply the 99-master-chrony-conf-override.yaml policy to the control plane nodes.
+
+oc apply -f 99-master-chrony-conf-override.yaml
+
+6. oc apply -f 99-worker-chrony-conf-override.yaml
+
+oc apply -f 99-worker-chrony-conf-override.yaml
+
+7. Check the status of the applied NTP settings.
+
+oc describe machineconfigpool
+
+ cat machineConfigs/chrony.conf 
+ pool 0.asia.pool.ntp.org iburst 
+ pool 1.asia.pool.ntp.org iburst 
+ pool 2.asia.pool.ntp.org iburst 
+ pool 3.asia.pool.ntp.org iburst
+ driftfile /var/lib/chrony/drift 
+ makestep 1.0 3 rtcsync 
+ logdir /var/log/chrony
+
+ encode base64
+
+ 
