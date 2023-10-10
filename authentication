@@ -18,6 +18,3 @@ spec:
     htpasswd:
       fileData:
         name: htpass-secret
-
-https://github.com/tehaisme/ocp4-config.git
-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
