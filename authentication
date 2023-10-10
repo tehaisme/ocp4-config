@@ -1,0 +1,21 @@
+1. Create an htpasswd file to store the user and password information
+   dnf install httpd-tools
+2. Create a secret to represent the htpasswd file
+   htpasswd -c -B -b users.htpasswd oauth-np.admin <REDACTED>
+3. Define an htpasswd identity provider resource that references the secret
+   oc create secret generic htpass-secret --from-file=htpasswd=users.htpasswd -n openshift-config
+4. Apply the resource to the default OAuth configuration to add the identity provider.
+
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  name: cluster
+spec:
+  identityProviders:
+  - name: Local User 
+    mappingMethod: claim 
+    type: HTPasswd
+    htpasswd:
+      fileData:
+        name: htpass-secret
+
