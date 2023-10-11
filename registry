@@ -1,5 +1,6 @@
 oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"managementState":"Managed"}}'
 oc get pod -n openshift-image-registry -l docker-registry=default
+oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"storage":{"emptyDir":{}}}}'
 
 apiVersion: v1
 kind: PersistentVolumeClaim
