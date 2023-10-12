@@ -20,7 +20,7 @@ data:
           resources:
             requests:
               storage: 40Gi
-      Retention: 60d
+      Retention: 15d
     alertmanagerMain:
       nodeSelector:
         node-role.kubernetes.io/monitoring: ""
@@ -32,8 +32,8 @@ data:
         spec:         
           storageClassName: fast        
             resources:           
-              requests:             
-                storage: 5Gi
+            requests:             
+              storage: 5Gi
     prometheusOperator:
       nodeSelector:
         node-role.kubernetes.io/monitoring: ""
